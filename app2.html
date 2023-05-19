@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy-Read converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen text-white">
+    <div class="container mx-auto px-4 max-w-screen-md pt-10">
+        <h1 class="text-4xl font-bold mb-8">Easy-Read Converter</h1>
+        <form id="easyReadForm">
+            <div class="mb-4">
+                <label class="block mb-2" for="textInput">Enter what you want to become easy-read here:</label>
+                <input type="text" id="textInput" name="textInput" class="w-full px-3 py-2 rounded-lg bg-white text-black" required>
+            </div>
+            <button type="submit" class="px-4 py-2 font-semibold bg-green-400 rounded-lg hover:bg-green-600">Make it Easy to Read!</button>
+            <div class="mt-4">
+                <div id="spinner" class="hidden animate-spin w-6 h-6 border-t-2 border-blue-500 rounded-full"></div>
+            </div>
+        </form>
+        <div id="output" class="mt-8 p-4 bg-white text-black rounded-lg text-lg leading-6"></div>
+        <footer class="text-center mt-16">
+            <a href="#" class="text-lg font-semibold underline">Made with ❤️ by Ash Lightowler</a>
+        </footer>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#easyReadForm').on('submit', function (e) {
+                e.preventDefault();
+                let textInput = $('#textInput').val();
+                let prompt = `Rewrite this ${textInput} plain english. You must use very simple language and short sentences.`;
+                console.log(prompt);
+
+                $('#spinner').removeClass('hidden');
+
+                $.get(`https://a.picoapps.xyz/ask-ai?prompt=${encodeURIComponent(prompt)}`, function (data) {
+                    console.log(data.response);
+
+                    let formattedResponse = data.response.replace(/\n/g, '<br>');
+                    $('#output').html(formattedResponse);
+
+                    $('#spinner').addClass('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
